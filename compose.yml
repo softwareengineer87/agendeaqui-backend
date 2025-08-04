@@ -1,0 +1,43 @@
+
+networks:
+  agendeaqui-net:
+    driver: bridge
+
+volumes:
+  pgdataagende:
+
+services:
+#  backend-agende:
+ #   build: ./
+  #  container_name: backend-agende
+   # environment:
+    # - NODE_ENV=production
+   # ports:
+    #  -  "3333:3333"
+   # depends_on:
+    #  postgre:
+     #     condition: service_healthy
+   # networks:
+    #  - agendeaqui-net
+   # volumes:
+    #  - .:/app
+   # command: "npm run start"
+
+  postgre:
+    image: postgres:16.9-alpine3.22
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5433:5432"
+    networks:
+      - agendeaqui-net
+    volumes:
+      - pgdataagende:/var/lib/postgresql/data
+
