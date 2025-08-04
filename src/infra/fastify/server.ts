@@ -19,11 +19,15 @@ app.register(routes, connection);
 app.register(routesCustomer, connection);
 
 //pgPromiseAdapter.executeScript('../database/create.sql');
-app.listen({ port: Number(process.env.PORT) || 3333, host: '0.0.0.0' }, (err, address) => {
-  if (err) {
-    app.log.error(err);
-    process.exit(1);
-  }
-  console.log(`server running on http://localhost/3333`);
-});
+app.listen({
+  port: Number(process.env.PORT) && 3333,
+  host: '0.0.0.0'
+},
+  (err, address) => {
+    if (err) {
+      app.log.error(err);
+      process.exit(1);
+    }
+    console.log(`server running on http://localhost/3333`);
+  });
 
