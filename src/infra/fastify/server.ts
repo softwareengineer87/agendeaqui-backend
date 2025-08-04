@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = Fastify();
+const port = process.env.PORT || 3333;
 
 app.register(cors, {
   origin: '*',
@@ -20,7 +21,7 @@ app.register(routesCustomer, connection);
 
 //pgPromiseAdapter.executeScript('../database/create.sql');
 app.listen({
-  port: process.env.PORT || 3333,
+  port,
   host: '0.0.0.0'
 },
   (err, address) => {
