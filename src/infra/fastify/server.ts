@@ -20,7 +20,7 @@ app.register(routesCustomer, connection);
 
 //pgPromiseAdapter.executeScript('../database/create.sql');
 app.listen({
-  port: Number(process.env.PORT) && 3333,
+  port: process.env.PORT || 3333,
   host: '0.0.0.0'
 },
   (err, address) => {
