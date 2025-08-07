@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 class Schedule {
 
+  status: string;
+
   constructor(
     readonly scheduleId: string,
     readonly serviceId: string,
@@ -9,7 +11,7 @@ class Schedule {
     readonly businessId: string,
     readonly scheduleHour: string,
     readonly scheduleDate: Date,
-    private status: string
+    status: string
   ) {
     if (serviceId === '') {
       throw new Error('O serviço é obrigatório');
@@ -17,6 +19,7 @@ class Schedule {
     if (scheduleHour === '') {
       throw new Error('A hora é obrigatória');
     }
+    this.status = status;
   }
 
   static create(
@@ -40,8 +43,8 @@ class Schedule {
   }
 
   cancell() {
-    if (this.getStatus() === 'inactive') {
-      throw new Error('O status já está cancelado');
+    if (this.status === 'inactive') {
+      throw new Error('O agendamento já está cancelado');
     }
     this.status = 'inactive';
   }

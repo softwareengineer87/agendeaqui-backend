@@ -13,6 +13,7 @@ interface CustomerRepository {
   getByEmail(email: string): Promise<Customer | null>;
   saveSchedule(schedule: Schedule): Promise<void>;
   scheduleDetail(scheduleId: string): Promise<Schedule>;
+  deleteSchedule(scheduleId: string): Promise<void>;
 }
 
 class CustomerRepositoryDatabase implements CustomerRepository {
@@ -64,10 +65,15 @@ class CustomerRepositoryDatabase implements CustomerRepository {
       scheduleData.service_id,
       scheduleData.customer_id,
       scheduleData.business_id,
-      scheduleData.status,
       scheduleData.schedule_hour,
-      scheduleData.schedule_date
+      scheduleData.schedule_date,
+      scheduleData.status
     );
+  }
+
+  async deleteSchedule(scheduleId: string): Promise<void> {
+    await this.connection.query(`DELETE FROM schedules
+    WHERE schedule_id = $1`, [scheduleId]);
   }
 
 }

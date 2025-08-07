@@ -7,6 +7,7 @@ import { CreateSchedule } from "../../domain/application/usecases/customer/Creat
 import { customerMiddleware } from "../../middlewares/customerMiddleware";
 import { GetSchedulesByCustomerId } from "../../domain/application/usecases/customer/GetSchedulesByCustomerId";
 import { ScheduleDetail } from "../../domain/application/usecases/customer/ScheduleDetail";
+import { DeleteSchedule } from "../../domain/application/usecases/customer/DeleteSchedule";
 
 function routesCustomer(fastify: FastifyInstance, connection: DatabaseConnection) {
 
@@ -16,6 +17,21 @@ function routesCustomer(fastify: FastifyInstance, connection: DatabaseConnection
   const createSchedule = new CreateSchedule(customerRepository);
   const getSchedules = new GetSchedulesByCustomerId(connection);
   const scheduleDetail = new ScheduleDetail(connection);
+  const deleteSchedule = new DeleteSchedule(customerRepository);
+
+  fastify.delete('/customer/cancell-schedule/:schedule_id', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const { schedule_id } = request.params as { schedule_id: string };
+      const { scheduleId } = await deleteSchedule.execute(schedule_id);
+      reply.code(201).send({
+        scheduleId,
+        message: 'Agendamento cancelado com sucesso!'
+      });
+    } catch (error) {
+      console.log(`Erro no servidor: ${error}`);
+      reply.code(500).send(error);
+    }
+  });
 
   fastify.post('/customer/login', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
@@ -124,6 +140,7 @@ function routesCustomer(fastify: FastifyInstance, connection: DatabaseConnection
       reply.code(500).send(error);
     }
   });
+
 
 }
 
